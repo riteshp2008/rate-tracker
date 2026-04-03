@@ -108,8 +108,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ],
     'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+        # Disabled throttling for development - use Redis throttling in production
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/hour',
@@ -124,20 +123,11 @@ CORS_ALLOWED_ORIGINS = config(
     cast=Csv()
 )
 
-# === Caching (Redis) ===
+# === Caching (Local memory for development) ===
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/0'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'redis.Redis',
-            'SOCKET_CONNECT_TIMEOUT': 5,
-            'SOCKET_TIMEOUT': 5,
-            'COMPRESSOR': 'redis.compression.ZstdCompressor',
-            'IGNORE_EXCEPTIONS': True,
-        },
-        'KEY_PREFIX': 'rate_tracker',
-        'TIMEOUT': 3600,  # 1 hour default
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
 

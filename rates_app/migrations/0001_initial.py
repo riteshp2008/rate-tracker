@@ -107,11 +107,11 @@ class Migration(migrations.Migration):
             index=models.Index(fields=['ingestion_timestamp'], name='idx_ingestion_timestamp'),
         ),
         migrations.AddIndex(
-            model_name='rawingestiorecord',
+            model_name='rawingestionrecord',
             index=models.Index(fields=['source', '-ingestion_timestamp'], name='idx_raw_source_ingestion'),
         ),
         migrations.AddIndex(
-            model_name='rawingestiorecord',
+            model_name='rawingestionrecord',
             index=models.Index(fields=['parsed_successfully', '-ingestion_timestamp'], name='idx_raw_parse_success'),
         ),
         migrations.AddIndex(

@@ -25,8 +25,9 @@ export default function Dashboard() {
   const [selectedProvider, setSelectedProvider] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   // Fetch latest rates
   const fetchLatestRates = useCallback(async () => {
@@ -68,6 +69,8 @@ export default function Dashboard() {
 
   // Initial load
   useEffect(() => {
+    setMounted(true);
+    setLastRefresh(new Date());
     fetchMetadata();
     fetchLatestRates();
   }, []);
@@ -106,7 +109,10 @@ export default function Dashboard() {
                 💰 Rate Tracker
               </h1>
               <p className="text-xs text-gray-500 mt-1">
-                Last updated: {format(lastRefresh, "MMM dd, HH:mm:ss")}
+                Last updated:{" "}
+                {lastRefresh
+                  ? format(lastRefresh, "MMM dd, HH:mm:ss")
+                  : "loading..."}
                 {autoRefresh && " • Auto-refreshing enabled"}
               </p>
             </div>
